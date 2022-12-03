@@ -1,1 +1,26 @@
-1
+  //dir
+        $dir = './sites/default/files/clp_datafiles/learners';
+		//dpm($dir);
+        $files = array();  
+		foreach (scandir($dir) as $file) {
+			// if (in_array($file, $ignored)) continue;
+			if ($file != "." && $file != "..") {
+				$files[$file] = filemtime($dir . '/' . $file);
+			}
+		}
+        arsort($files);
+		//dpm($files);
+		$files = array_keys($files);
+		dpm($files);
+		
+    	$sorted_files = ($files) ? $files : false;
+		$filename = $sorted_files[0];
+
+		$complete_path = $dir.'/'.$filename;
+		$csvData = fopen($complete_path, 'rb');
+		// $lines = explode(PHP_EOL, $csvData);
+		$csv_data_array = array();
+		while(!feof($csvData)){
+			$csv_data_array[] = fgetcsv($csvData);
+		}
+		fclose($csvData);
